@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // マテリアルデザインのアプリを作るための基本設定
     return MaterialApp(
-      title: 'healthLog',
+      title: '体重を記録',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF21B0B9)),
         useMaterial3: true,

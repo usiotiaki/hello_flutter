@@ -9,7 +9,7 @@
     <uses-feature android:name="android.software.health_connect" android:required="true" />
 
     <application
-        android:label="healthLog"
+        android:label="体重を記録"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
