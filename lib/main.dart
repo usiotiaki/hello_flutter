@@ -147,6 +147,15 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
           if (mounted) {
             final msg = (successWeight && successFat) ? 'ヘルスコネクトに保存しました！' : '保存に失敗しました';
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+            // 保存成功時にフォームをクリアし、日時を現在に戻す
+            if (successWeight && successFat) {
+              _weightController.clear();
+              _fatController.clear();
+              setState(() {
+                _selectedDate = DateTime.now();
+              });
+            }
           }
         } else {
           if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されませんでした')));
