@@ -1,5 +1,7 @@
 // Flutterのマテリアルデザインに関するウィジェットを読み込む
 import 'package:flutter/material.dart';
+// ヘルスコネクト連携用パッケージ
+import 'package:health/health.dart';
 
 // アプリケーションが起動する一番最初の場所
 void main() {
@@ -43,6 +45,14 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
   // 日付の初期値
   DateTime _selectedDate = DateTime.now();
 
+  // Healthパッケージのインスタンス
+  final Health _health = Health();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // 画面が破棄されるときにコントローラーも破棄する
   @override
   void dispose() {
@@ -80,12 +90,70 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
   }
 
   // 保存ボタンが押されたときの処理
-  void _saveData() {
+  Future<void> _saveData() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: ここでヘルスコネクトへの保存処理を行う
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('保存処理を実行します（未実装）')),
-      );
+      // 1. 扱いたいデータタイプと権限を定義
+      final types = [
+        HealthDataType.WEIGHT,
+        HealthDataType.BODY_FAT_PERCENTAGE,
+      ];
+      final permissions = [
+        HealthDataAccess.READ_WRITE,
+        HealthDataAccess.READ_WRITE,
+      ];
+
+      try {
+        // ヘルスコネクトのステータスを確認
+        final status = await _health.getHealthConnectSdkStatus();
+        if (status != HealthConnectSdkStatus.sdkAvailable) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('ヘルスコネクトの状態: $status')),
+            );
+          }
+          // インストールやアップデートが必要な場合はストアへ誘導
+          // 詳細なステータス判定でエラーが出るため、利用可能でない場合は一律でインストールを試みる
+          await _health.installHealthConnect();
+          return;
+        }
+
+        // 2. 権限のリクエスト（初回は許可ダイアログが表示されます）
+        bool requested = await _health.requestAuthorization(types, permissions: permissions);
+
+        if (requested) {
+          final now = _selectedDate;
+          
+          // 3. 体重の保存
+          double weight = double.parse(_weightController.text);
+          bool successWeight = await _health.writeHealthData(
+            value: weight,
+            type: HealthDataType.WEIGHT,
+            startTime: now,
+            endTime: now,
+          );
+
+          // 4. 体脂肪率の保存（入力がある場合のみ）
+          bool successFat = true;
+          if (_fatController.text.isNotEmpty) {
+            double fat = double.parse(_fatController.text);
+            successFat = await _health.writeHealthData(
+              value: fat,
+              type: HealthDataType.BODY_FAT_PERCENTAGE,
+              startTime: now,
+              endTime: now,
+            );
+          }
+
+          if (mounted) {
+            final msg = (successWeight && successFat) ? 'ヘルスコネクトに保存しました！' : '保存に失敗しました';
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+          }
+        } else {
+          if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されませんでした')));
+        }
+      } catch (e) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('エラー: $e')));
+      }
     }
   }
 
