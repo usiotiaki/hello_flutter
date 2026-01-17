@@ -168,6 +168,9 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 選択された日時が現在より未来かどうかを判定
+    final bool isFutureDate = _selectedDate.isAfter(DateTime.now());
+
     return Scaffold(
       appBar: AppBar(title: const Text('健康データ入力')),
       body: Padding(
@@ -215,8 +218,18 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
               const SizedBox(height: 20),
               // 保存ボタン
               ElevatedButton(
-                onPressed: _saveData,
+                // 未来の日時の場合はボタンを無効化（null）にする
+                onPressed: isFutureDate ? null : _saveData,
                 child: const Text('ヘルスコネクトに保存'),
+              ),
+              // 未来の日時の場合にメッセージを表示
+              if (isFutureDate)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    '過去または現在の日時を選択してください',
+                    style: TextStyle(color: Colors.red),
+                  ),
               ),
             ],
           ),
