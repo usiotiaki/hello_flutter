@@ -9,7 +9,7 @@
     <uses-feature android:name="android.software.health_connect" android:required="true" />
 
     <application
-        android:label="hello_flutter"
+        android:label="healthLog"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

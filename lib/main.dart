@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // マテリアルデザインのアプリを作るための基本設定
     return MaterialApp(
-      title: 'Health Connect App',
+      title: 'healthLog',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF21B0B9)),
         useMaterial3: true,
@@ -230,7 +230,7 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
                     '過去または現在の日時を選択してください',
                     style: TextStyle(color: Colors.red),
                   ),
-              ),
+                ),
             ],
           ),
         ),
