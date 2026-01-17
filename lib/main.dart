@@ -170,7 +170,19 @@ class _HealthInputScreenState extends State<HealthInputScreen> {
               // 日付選択行
               ListTile(
                 title: Text("日時: ${_selectedDate.year}/${_selectedDate.month}/${_selectedDate.day} ${_selectedDate.hour.toString().padLeft(2, '0')}:${_selectedDate.minute.toString().padLeft(2, '0')}"),
-                trailing: const Icon(Icons.calendar_today),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.update),
+                      tooltip: '現在日時に設定',
+                      onPressed: () {
+                        setState(() => _selectedDate = DateTime.now());
+                      },
+                    ),
+                    const Icon(Icons.calendar_today),
+                  ],
+                ),
                 onTap: () => _selectDate(context),
               ),
               // 体重入力
