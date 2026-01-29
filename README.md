@@ -1,16 +1,14 @@
 # hello_flutter
 
-A new Flutter project.
+A new Flutter project.  
 
-## Getting Started
+Android標準の健康管理アプリ「ヘルスコネクト」に、  
+体の数値(体重および体脂肪率)をほぼ直接書き込めるアプリを作成しました。
 
-This project is a starting point for a Flutter application.
+## 目的
+体重記録の手間を減らす。
 
-A few resources to get you started if this is your first Flutter project:
+カロリー管理、運動記録、女性の健康管理など体重・体脂肪率を参照するアプリが増えるにつれ、それぞれに都度体重などを入力していくことが手間になる。  
+ヘルスコネクトにのみ書き込むことで各アプリから読み取れるようにしたい。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
